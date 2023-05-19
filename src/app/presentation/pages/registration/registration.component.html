@@ -1,0 +1,10 @@
+<form [formGroup]="formGroup">
+    <input type="text" formControlName="firstName" placeholder="Имя">
+    <input type="text" formControlName="lastName" placeholder="Фамилия">
+    <input type="text" formControlName="email" placeholder="Email">
+    <input type="number" formControlName="phone" placeholder="Телефон">
+    <input type="text" formControlName="websiteURL" placeholder="Адрес веб-сайта">
+    <input type="text" formControlName="password" placeholder="Пароль">
+    <button (click)="reg($event)" [disabled]="!formGroup.valid">Зарегистрироваться</button>
+    <div *ngIf="detail">{{detail}}</div>
+</form>

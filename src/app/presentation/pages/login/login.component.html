@@ -1,0 +1,6 @@
+<form [formGroup]="loginFormGroup">
+    <input type="text" formControlName="email">
+    <input type="text" formControlName="password">
+    <button (click)="login($event)" [disabled]="!loginFormGroup.valid">Login</button>
+    <div *ngIf="detail">{{detail}}</div>
+</form>
