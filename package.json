@@ -20,7 +20,6 @@
         "@angular/router": "^14.0.0",
         "@ngneat/reactive-forms": "4.0.4",
         "@rxweb/reactive-form-validators": "2.1.6",
-        "angular-in-memory-web-api": "^0.16.0",
         "jssha": "^3.3.0",
         "rxjs": "~7.5.0",
         "tslib": "^2.3.0",
