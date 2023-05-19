@@ -9,6 +9,6 @@ import {CommonModule} from '@angular/common';
     styleUrls: ['./error-page.component.less']
 })
 export class ErrorPageComponent {
-    @Input() code: string | number = '404';
-    @Input() message = 'Not found';
+    @Input() protected code: string | number = '404';
+    @Input() protected message = 'Not found';
 }

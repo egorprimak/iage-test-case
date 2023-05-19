@@ -1,2 +1,52 @@
-<p>profile works!</p>
-<button (click)="update()">update</button>
+<div class="profile">
+    <div class="profile__header">
+        <div class="profile__title">Profile</div>
+        <button mat-icon-button aria-label="Edit" *ngIf="!canEdit" (click)="startEditMode()">
+            <mat-icon>edit</mat-icon>
+        </button>
+    </div>
+    <form [formGroup]="formGroup" class="form profile__form">
+        <mat-form-field class="form__field">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName" [readonly]="!canEdit">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName" [readonly]="!canEdit">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone" type="phone" [readonly]="!canEdit">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>websiteURL</mat-label>
+            <input matInput formControlName="websiteURL" [readonly]="!canEdit">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" readonly>
+        </mat-form-field>
+        <div class="buttons" *ngIf="canEdit">
+            <button
+                mat-stroked-button
+                color="primary"
+                class="profile__button"
+                (click)="update()"
+                [disabled]="!formGroup.valid"
+            >Update
+            </button>
+            <button
+                mat-stroked-button
+                color="danger"
+                class="profile__button"
+                (click)="cancelEdit()"
+                [disabled]="!formGroup.valid"
+            >Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="spinner-wrapper" *ngIf="saving">
+    <mat-spinner diameter="50"></mat-spinner>
+</div>

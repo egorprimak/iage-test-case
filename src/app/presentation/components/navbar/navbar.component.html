@@ -12,9 +12,15 @@
         <div class="navbar-right">
             <ng-container *ngIf="user">
                 <a class="link navbar__link" routerLink="profile" routerLinkActive="link_active">
+                    <mat-icon
+                        class="navbar__icon"
+                        aria-hidden="false"
+                        aria-label="Account"
+                        fontIcon="account_circle"
+                    ></mat-icon>
                     {{user.firstName + ' ' + user.lastName}}
                 </a>
-                <button (click)="logout()">Logout</button>
+                <button mat-stroked-button (click)="logout()">Logout</button>
             </ng-container>
         </div>
     </nav>

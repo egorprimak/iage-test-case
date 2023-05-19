@@ -3,7 +3,6 @@ import {ActionResult} from "../core/actions/action.model";
 import {User} from "../core/user/user.model";
 
 export enum ApiMethod {
-    GET = 'GET',
     POST = 'POST',
     PUT = 'PUT'
 }

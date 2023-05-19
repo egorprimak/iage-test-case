@@ -1,6 +1,33 @@
-<form [formGroup]="loginFormGroup">
-    <input type="text" formControlName="email">
-    <input type="text" formControlName="password">
-    <button (click)="login($event)" [disabled]="!loginFormGroup.valid">Login</button>
-    <div *ngIf="detail">{{detail}}</div>
-</form>
+<div class="login">
+    <div class="login__title">Login</div>
+    <form [formGroup]="loginFormGroup" class="form login__form" (submit)="login($event)">
+        <mat-form-field class="form__field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" [type]="passwordHidden ? 'password' : 'text'">
+            <mat-icon
+                matSuffix
+                (click)="passwordHidden = !passwordHidden"
+            >{{passwordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </mat-form-field>
+        <button
+            mat-stroked-button
+            color="primary"
+            class="login__button"
+            (click)="login($event)"
+            [disabled]="!loginFormGroup.valid"
+        >Login</button>
+        <div class="login__link">
+            <span>
+                Haven't account? Go to the <a class="link" routerLink="/registration">register page</a>
+            </span>
+        </div>
+    </form>
+</div>
+
+<div class="spinner-wrapper" *ngIf="loginInProcess">
+    <mat-spinner diameter="50"></mat-spinner>
+</div>

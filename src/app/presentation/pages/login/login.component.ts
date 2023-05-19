@@ -5,6 +5,7 @@ import {AuthService} from "../../../shared/services/auth.service";
 import {NavigatorService} from "../../../shared/services/navigator.service";
 import {takeUntil} from "rxjs";
 import {DestroyerService} from "../../../shared/services/destroyer.service";
+import {NotifierService} from "../../../shared/services/notifier.service";
 
 @Component({
     selector: 'app-login',
@@ -13,13 +14,23 @@ import {DestroyerService} from "../../../shared/services/destroyer.service";
 })
 export class LoginComponent {
     protected loginFormGroup: FormGroup;
-    protected detail = '';
+    protected passwordHidden = true;
+    protected loginInProcess = false;
 
     constructor(
         private readonly authService: AuthService,
         private readonly navigatorService: NavigatorService,
-        private readonly destroyer: DestroyerService
+        private readonly destroyer: DestroyerService,
+        private readonly notifier: NotifierService
     ) {
+        this.authService.isLogin$
+            .pipe(takeUntil(this.destroyer))
+            .subscribe(isLogin => {
+                if (isLogin) {
+                    this.navigatorService.toHomePage();
+                }
+            });
+
         this.loginFormGroup = new FormGroup({
             email: new FormControl('', {
                 validators: [Validators.email, Validators.required]
@@ -30,17 +41,24 @@ export class LoginComponent {
         });
     }
 
-    login(e: Event): void {
+    protected login(e: Event): void {
         e.preventDefault();
 
-        this.detail = '';
         const data: UserLogin = this.loginFormGroup.value;
+        if (!data.email.trim() || !data.password.trim()) {
+            this.notifier.show('Некорректные данные формы');
+            return;
+        }
 
+        this.loginInProcess = true;
         this.authService.login(data)
             .pipe(takeUntil(this.destroyer))
             .subscribe(res => {
-                console.log('res', res);
-                this.detail = res.detail;
+                this.loginInProcess = false;
+                if (res.success) {
+                    this.navigatorService.toHomePage();
+                }
+                this.notifier.show(res.detail);
             });
     }
 }

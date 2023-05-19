@@ -9,15 +9,11 @@ export class NavigatorService {
     }
 
     toHomePage(): void {
-        this.navigate('/home');
+        this.navigate('/');
     }
 
     toLoginPage(): void {
         this.navigate('/login');
-    }
-
-    toRegisterPage(): void {
-        this.navigate('/register');
     }
 
     private navigate(path: string): void {

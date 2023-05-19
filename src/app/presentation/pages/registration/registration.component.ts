@@ -5,6 +5,7 @@ import {AuthService} from "../../../shared/services/auth.service";
 import {DestroyerService} from "../../../shared/services/destroyer.service";
 import {takeUntil} from "rxjs";
 import {NavigatorService} from "../../../shared/services/navigator.service";
+import {NotifierService} from "../../../shared/services/notifier.service";
 
 @Component({
     selector: 'app-registration',
@@ -13,13 +14,23 @@ import {NavigatorService} from "../../../shared/services/navigator.service";
 })
 export class RegistrationComponent {
     protected formGroup: FormGroup;
-    protected detail = '';
+    protected passwordHidden = true;
+    protected regInProcess = false;
 
     constructor(
-        private readonly auth: AuthService,
+        private readonly authService: AuthService,
         private readonly navigatorService: NavigatorService,
         private readonly destroyer: DestroyerService,
+        private readonly notifier: NotifierService
     ) {
+        this.authService.isLogin$
+            .pipe(takeUntil(this.destroyer))
+            .subscribe(isLogin => {
+                if (isLogin) {
+                    this.navigatorService.toHomePage();
+                }
+            });
+
         this.formGroup = new FormGroup({
             firstName: new FormControl('', {
                 validators: [Validators.required]
@@ -38,20 +49,29 @@ export class RegistrationComponent {
         });
     }
 
-    reg(e: Event): void {
+    protected reg(e: Event): void {
         e.preventDefault();
 
-        this.detail = '';
         const data: User = this.formGroup.value;
+        if (!this.isValidTrim(data)) {
+            this.notifier.show('Некорректные данные формы');
+            return;
+        }
 
-        this.auth.register(data)
+        this.regInProcess = true;
+        this.authService.register(data)
             .pipe(takeUntil(this.destroyer))
             .subscribe(res => {
-                this.detail = res.detail;
+                this.regInProcess = false;
                 if (res.success) {
-                    setTimeout(() => this.navigatorService.toLoginPage(), 500);
+                    this.navigatorService.toLoginPage();
                 }
+                this.notifier.show(res.detail);
             });
     }
 
+    private isValidTrim(data: User): boolean {
+        const {firstName, lastName, email, password} = data;
+        return [firstName, lastName, email, password].every(i => !!i.trim());
+    }
 }

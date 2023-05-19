@@ -1,10 +1,50 @@
-<form [formGroup]="formGroup">
-    <input type="text" formControlName="firstName" placeholder="Имя">
-    <input type="text" formControlName="lastName" placeholder="Фамилия">
-    <input type="text" formControlName="email" placeholder="Email">
-    <input type="number" formControlName="phone" placeholder="Телефон">
-    <input type="text" formControlName="websiteURL" placeholder="Адрес веб-сайта">
-    <input type="text" formControlName="password" placeholder="Пароль">
-    <button (click)="reg($event)" [disabled]="!formGroup.valid">Зарегистрироваться</button>
-    <div *ngIf="detail">{{detail}}</div>
-</form>
+<div class="registration">
+    <div class="registration__title">Registration</div>
+    <form [formGroup]="formGroup" class="form registration__form">
+        <mat-form-field class="form__field">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone" type="phone">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>websiteURL</mat-label>
+            <input matInput formControlName="websiteURL">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+        </mat-form-field>
+        <mat-form-field class="form__field">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" [type]="passwordHidden ? 'password' : 'text'">
+            <mat-icon
+                matSuffix
+                (click)="passwordHidden = !passwordHidden"
+            >{{passwordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </mat-form-field>
+        <button
+            mat-stroked-button
+            color="primary"
+            class="registration__button"
+            (click)="reg($event)"
+            [disabled]="!formGroup.valid"
+        >Register
+        </button>
+        <div class="registration__link">
+            <span>
+                Have account? Go to the <a class="link" routerLink="/login">login page</a>
+            </span>
+        </div>
+    </form>
+</div>
+
+<div class="spinner-wrapper" *ngIf="regInProcess">
+    <mat-spinner diameter="50"></mat-spinner>
+</div>

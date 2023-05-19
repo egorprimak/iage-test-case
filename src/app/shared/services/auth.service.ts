@@ -4,7 +4,7 @@ import {User, UserLogin} from "../../core/user/user.model";
 import {ActionResult} from "../../core/actions/action.model";
 import {ProfileService} from "./profile.service";
 import {STORAGE} from "../../app.module";
-import {API_LOGIN, API_REGISTER, IS_LOGIN, PROFILE} from "../consts";
+import {API_LOGIN, API_REGISTER, PROFILE_KEY} from "../consts";
 import {HttpClient} from "@angular/common/http";
 import {FakeBackendActionResult} from "../../db/fake-backend.model";
 
@@ -38,11 +38,11 @@ export class AuthService {
         const path = '/' + API_LOGIN;
         return this.http.post<FakeBackendActionResult>(path, data)
             .pipe(
-                tap(res  => {
+                tap(res => {
                     const user = res?.user || null;
                     this.profile.data = user;
                     this.isLogin = !!user;
-                    this.storage.setItem(PROFILE, JSON.stringify(user));
+                    this.storage.setItem(PROFILE_KEY, JSON.stringify(user));
                 }),
                 switchMap(data => {
                     const actionResult: ActionResult = {
@@ -58,7 +58,6 @@ export class AuthService {
     logout(): void {
         this.profile.data = null;
         this.isLogin = false;
-        this.storage.removeItem(PROFILE);
-        this.storage.removeItem(IS_LOGIN);
+        this.storage.removeItem(PROFILE_KEY);
     }
 }

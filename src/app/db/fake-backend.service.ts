@@ -19,7 +19,7 @@ export class FakeBackendService implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const {url, method, headers, body} = req;
+        const {url, method, body} = req;
 
         const checkRoute = (path: string, apiMethod: ApiMethod) => url.endsWith(path) && method === apiMethod;
 
@@ -109,8 +109,8 @@ export class FakeBackendService implements HttpInterceptor {
             });
         }
 
-        // TODO: захэшировать пароль
-        // const hashPassword = new jsSHA()
+        // TODO: хэширование пароля на бэкенде...
+        // ...
 
         const user: User = {
             id: getRandomString(),
